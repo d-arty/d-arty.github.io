@@ -1,0 +1,342 @@
+*::-webkit-input-placeholder {
+	color: #666;
+	opacity: 1;
+}
+*:-moz-placeholder {
+	color: #666;
+	opacity: 1;
+}
+*::-moz-placeholder {
+	color: #666;
+	opacity: 1;
+}
+*:-ms-input-placeholder {
+	color: #666;
+	opacity: 1;
+}
+
+body input:focus:required:invalid,
+body textarea:focus:required:invalid {
+
+}
+body input:required:valid,
+body textarea:required:valid {
+
+}
+body {
+	font-family: "RobotoRegular", sans-serif;
+	font-size: 16px;
+}
+*{
+	box-sizing: border-box;
+}
+
+#before-load {
+	position: fixed; /*фиксированное положение блока*/
+	left: 0; /*положение элемента слева*/
+	top: 0; /*положение элемента сверху*/
+	right: 0; /*положение элемента справа*/
+	bottom: 0; /*положение элемента снизу*/
+	background: #fff;		
+	z-index: 1001; /*располагаем его над всеми элементами на странице*/
+}
+#before-load i {
+	font-size: 70px; /*размер иконки*/
+	position: absolute; /*положение абсолютное, позиционируется относительно его ближайшего предка*/
+	left: 50%; /*слева 50% от ширины родительского блока*/
+	top: 50%; /*сверху 50% от высоты родительского блока*/
+	margin: -35px 0 0 -35px; /*смещение иконки, чтобы она располагалась по центру*/
+}
+
+/* HEADER STYLES */
+.header{
+	  background-image: url('../img/figure-background-bottom.png'), radial-gradient(#bdadea, #4381c1);
+		background-repeat: no-repeat, no-repeat;
+		background-size: 100% 15%, 100% 100%;
+		background-position: center bottom, center center;
+		height: 900px;
+		padding-top: 30px;
+		position:relative;
+}
+
+.language-switcher{
+	position: absolute;
+	top: 10px;
+	left: 100px;
+	padding: 10px;
+	margin:0;
+}
+
+.language-switcher ul{
+	list-style: none;
+	padding:0;
+	margin:0;
+}
+.language-switcher li{
+	border-radius: 10px;
+	background-color: #dce8f3;
+	width: 150px;
+	margin:10px;
+	padding:10px;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.language-switcher ul li a{
+	font-family: "OpenSans",helvetica, sans-serif;
+	font-size: 20px;
+	color: #000;
+}
+
+.header-image{
+	width:500px;
+	margin:0 auto;
+	border-radius: 50%;
+	border: 3px dashed #dce8f3;
+	padding: 10px;
+}
+
+.header-image img{
+	width:100%;
+}
+
+.header-name{
+	font-family:"Montserrat", helvetica, sans-serif;
+	font-size: 34px;
+	color:#dce8f3;
+	padding: 30px;
+	text-align: center;
+}
+.header-name span{
+	font-family:"OpenSans", helvetica, sans-serif;
+	font-size: 24px;
+	color:#dce8f3;
+	text-align: center;
+	display: block;
+}
+
+.contact-links{
+	text-align: center;
+	width: 80%;
+	margin: 0 auto;
+}
+.contact-info h2{
+	font-family: "Montserrat-ExtraLight";
+	font-size:24px;
+	color: #dce8f3;
+	text-align: center;
+}
+.contact-links a{
+     display: inline-block;
+     padding: 2%;
+		 font-family: "Montserrat-ExtraLight";
+		 font-size:20px;
+		 color: #dce8f3;
+}
+
+/* ABOUT ME SECTION */
+.aboutme{
+	padding:60px;
+	background-image: linear-gradient(#315E8D, #bea2c2);
+}
+
+.aboutme ul{
+	list-style: none;
+}
+.aboutme li{
+	font-size:24px;
+	font-family: "OpenSans", helvetica, sans-serif;
+	color: #dce8f3;
+	text-align: justify;
+}
+
+.aboutme-title-wrapper{
+	padding:20px;
+}
+
+.aboutme-title{
+	font-family: "Montserrat-ExtraBold";
+	font-size:40px;
+	text-transform: uppercase;
+	color: #dce8f3;
+}
+.skills-title{
+	font-family: "Montserrat-ExtraBold";
+	font-size:30px;
+	text-transform: uppercase;
+	color: #dce8f3;
+}
+
+.aboutme-description p{
+	font-size:24px;
+	font-family: "OpenSans", helvetica, sans-serif;
+	color: #dce8f3;
+	text-align: justify;
+}
+
+/* PORTFOLIO SECTION */
+.portfolio{
+	background-color: #bea2c2;
+	padding:60px;
+}
+.portfolio-title-wrapper{
+	padding:20px;
+}
+.portfolio-title{
+	font-family: "Montserrat-ExtraBold";
+	font-size:40px;
+	text-transform: uppercase;
+	color: #dce8f3;
+}
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 5vw);
+    grid-gap: 15px;
+		margin-top:55px;
+}
+
+.gallery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery__item--1 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+.gallery__item--2 {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+.gallery__item--3 {
+    grid-column-start: 5;
+    grid-column-end: 9;
+    grid-row-start: 1;
+    grid-row-end: 6;
+}
+
+.gallery__item--4 {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 6;
+}
+
+.gallery__item--5 {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 6;
+    grid-row-end: 9;
+}
+
+.gallery__item--6 {
+    grid-column-start: 5;
+    grid-column-end: 9;
+    grid-row-start: 6;
+    grid-row-end: 9;
+}
+
+.gallery__item{
+	position:relative;
+}
+.gallery__item a:hover span.hover{
+	background-color: #a37871;
+}
+.gallery__item a span.hover{
+	position: absolute;
+	bottom: 0;
+	padding:10px;
+	font-family: "OpenSans-Light";
+	font-size: 23px;
+	text-align: center;
+	width:100%;
+	height:70px;
+	color: #dce8f3;
+	vertical-align: center;
+	background-color: #4e4b5c;
+}
+
+/* CURRICULUM VITAE SECTION */
+.curriculum-vitae{
+	padding: 60px;
+	background-color: #4e4b5c;
+}
+
+.curriculum-vitae-title-wrapper{
+	padding:20px;
+}
+.curriculum-vitae-title{
+	font-family: "Montserrat-ExtraBold";
+	font-size:40px;
+	text-transform: uppercase;
+	color: #dce8f3;
+}
+.jobs-wrapper{
+padding:30px;
+}
+.job-item{
+	margin:30px;
+	color: #dce8f3;
+	background-image: linear-gradient(to right bottom, #4381c1, #5e5b6a);
+	padding:30px;
+	border-radius: 33px;
+}
+.job-title{
+	font-size:30px;
+	font-family: "Montserrat-ExtraLight";
+}
+.job-company span{
+	font-size:26px;
+	font-family: "OpenSans", helvetica, sans-serif;
+}
+.job-company i{
+	font-size:26px;
+	padding:10px;
+}
+.job-date span{
+	font-size:20px;
+  font-family: "OpenSans", helvetica, sans-serif;
+}
+.job-date i{
+	font-size:20px;
+  padding:10px;
+}
+.job-description{
+
+}
+.job-description p{
+	font-size:26px;
+	font-family:"PTSans";
+}
+
+.job-responsabilities ul {
+ list-style: none;
+ font-family:"PTSans";
+}
+
+.job-responsabilities ul li i{
+ font-size: 26px;
+ padding: 10px;
+}
+
+.job-responsabilities ul li span{
+ font-size: 26px;
+ font-family:"PTSans";
+}
+.job-item-conductor{
+    background-image: url('../img/conductor.png');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-color: #4381c1;
+}
+.job-item-conductor .job-description p{
+    width: 950px;
+}
