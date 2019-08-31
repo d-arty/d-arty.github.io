@@ -81,22 +81,22 @@
 		</div>
 		<div class="gallery">
 			<div class="gallery__item gallery__item--1">
-				<a href="#"><span class="hover">Uzina de turnare</span><img src="img/Ares-md-image.png" class="gallery__img" alt="Uzina de turnare"></a>
+				<a class="fancy-image" href="img/Ares-md-image.png"><span class="hover">Uzina de turnare</span><img src="img/Ares-md-image.png" class="gallery__img" alt="Uzina de turnare"></a>
 			</div>
 			<div class="gallery__item gallery__item--2">
-				<a href="#"><span class="hover">Modelarea metalului</span><img src="img/Micon-page.png" class="gallery__img" alt="Modelarea metalului"></a>
+				<a class="fancy-image" href="img/Micon-page.png"><span class="hover">Modelarea metalului</span><img src="img/Micon-page.png" class="gallery__img" alt="Modelarea metalului"></a>
 			</div>
 			<div class="gallery__item gallery__item--3">
-				<a href="#"><span class="hover">Companie agricolă</span><img src="img/agrodenidan-agro-company.png" class="gallery__img" alt="Companie agricolă"></a>
+				<a class="fancy-image" href="img/agrodenidan-agro-company.png"><span class="hover">Companie agricolă</span><img src="img/agrodenidan-agro-company.png" class="gallery__img" alt="Companie agricolă"></a>
 			</div>
 			<div class="gallery__item gallery__item--4">
-				<a href="#"><span class="hover">Online magazin</span><img src="img/agm-old.png" class="gallery__img" alt="Online magazin"></a>
+				<a class="fancy-image" href="img/agm-old.png"><span class="hover">Online magazin</span><img src="img/agm-old.png" class="gallery__img" alt="Online magazin"></a>
 			</div>
 			<div class="gallery__item gallery__item--5">
-				<a href="#"><span class="hover">Restaurant</span><img src="img/vatraneamului-old-design.png" class="gallery__img" alt="Restaurant"></a>
+				<a class="fancy-image" href="img/vatraneamului-old-design.png"><span class="hover">Restaurant</span><img src="img/vatraneamului-old-design.png" class="gallery__img" alt="Restaurant"></a>
 			</div>
 			<div class="gallery__item gallery__item--6">
-				<a href="#"><span class="hover">Android: Aplicație cu GPS Tracking</span><img src="img/rtec-gps.png" class="gallery__img" alt="Android: Aplicație cu GPS Tracking"></a>
+				<a class="fancy-image" href="img/rtec-gps-large.png"><span class="hover">Android: Aplicație cu GPS Tracking</span><img src="img/rtec-gps.png" class="gallery__img" alt="Android: Aplicație cu GPS Tracking"></a>
 			</div>
 		</div>
 	</section>
@@ -168,6 +168,7 @@
 	<script>
 $(window).load(function() {
 	$('#before-load').find('i').fadeOut().end().delay(400).fadeOut('slow');
+	$("a.fancy-image").fancybox();
 });
 </script>
 </body>

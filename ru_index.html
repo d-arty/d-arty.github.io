@@ -81,22 +81,22 @@
 		</div>
 		<div class="gallery">
 			<div class="gallery__item gallery__item--1">
-				<a href="#"><span class="hover">Сталелитейный завод</span><img src="img/Ares-md-image.png" class="gallery__img" alt="Сталелитейный завод"></a>
+				<a class="fancy-image" href="img/Ares-md-image.png"><span class="hover">Сталелитейный завод</span><img src="img/Ares-md-image.png" class="gallery__img" alt="Сталелитейный завод"></a>
 			</div>
 			<div class="gallery__item gallery__item--2">
-				<a href="#"><span class="hover">Изделия из метала</span><img src="img/Micon-page.png" class="gallery__img" alt="Изделия из метала"></a>
+				<a class="fancy-image" href="img/Micon-page.png"><span class="hover">Изделия из метала</span><img src="img/Micon-page.png" class="gallery__img" alt="Изделия из метала"></a>
 			</div>
 			<div class="gallery__item gallery__item--3">
-				<a href="#"><span class="hover">Сельскохозяйственная компания</span><img src="img/agrodenidan-agro-company.png" class="gallery__img" alt="Сельскохозяйственная компания"></a>
+				<a class="fancy-image" href="img/agrodenidan-agro-company.png"><span class="hover">Сельскохозяйственная компания</span><img src="img/agrodenidan-agro-company.png" class="gallery__img" alt="Сельскохозяйственная компания"></a>
 			</div>
 			<div class="gallery__item gallery__item--4">
-				<a href="#"><span class="hover">Интернет магазин</span><img src="img/agm-old.png" class="gallery__img" alt="Интернет магазин"></a>
+				<a class="fancy-image" href="img/agm-old.png"><span class="hover">Интернет магазин</span><img src="img/agm-old.png" class="gallery__img" alt="Интернет магазин"></a>
 			</div>
 			<div class="gallery__item gallery__item--5">
-				<a href="#"><span class="hover">Ресторан</span><img src="img/vatraneamului-old-design.png" class="gallery__img" alt="Ресторан"></a>
+				<a class="fancy-image" href="img/vatraneamului-old-design.png"><span class="hover">Ресторан</span><img src="img/vatraneamului-old-design.png" class="gallery__img" alt="Ресторан"></a>
 			</div>
 			<div class="gallery__item gallery__item--6">
-				<a href="#"><span class="hover">Android: Приложение слежения по GPS</span><img src="img/rtec-gps.png" class="gallery__img" alt="Android: Приложение слежения по GPS"></a>
+				<a class="fancy-image" href="img/rtec-gps-large.png"><span class="hover">Android: Приложение слежения по GPS</span><img src="img/rtec-gps.png" class="gallery__img" alt="Android: Приложение слежения по GPS"></a>
 			</div>
 		</div>
 	</section>
@@ -171,6 +171,7 @@
 	<script>
 $(window).load(function() {
 	$('#before-load').find('i').fadeOut().end().delay(400).fadeOut('slow');
+	$("a.fancy-image").fancybox();
 });
 </script>	
 </body>
