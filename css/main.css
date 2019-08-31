@@ -91,13 +91,13 @@ body {
 .header-image{
 	width:500px;
 	margin:0 auto;
-	border-radius: 50%;
-	border: 3px dashed #dce8f3;
+	border-radius: 50%;	
 	padding: 10px;
 }
 
 .header-image img{
 	width:100%;
+	border-radius:30px;
 }
 
 .header-name{
