@@ -289,6 +289,9 @@ padding:30px;
 	padding:30px;
 	border-radius: 33px;
 }
+.task{
+	padding-left:40px;
+}
 .job-title{
 	font-size:30px;
 	font-family: "Montserrat-ExtraLight";
@@ -332,11 +335,12 @@ padding:30px;
  font-family:"PTSans";
 }
 .job-item-conductor{
-    background-image: url('../img/conductor.png');
+    background-image: url('../img/conductor2.png'), linear-gradient(to right bottom, #4381c1, #5e5b6a);
     background-repeat: no-repeat;
     background-position: bottom right;
     background-size: auto 100%;
     background-color: #4381c1;
+    height:455px;
 }
 .job-item-conductor .job-description p{
     width: 950px;
