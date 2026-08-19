@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Writing rules() in a Form Request | Danici Artiom</title>
+	<meta name="description" content="Go beyond pipe-delimited strings: rule arrays, Rule objects, conditional rules, and custom messages() and attributes()." />
+	<meta name="author" content="Danici Artiom" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+	<link rel="icon" href="../favicon.png" sizes="32x32" type="image/png" />
+	<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+	<link rel="canonical" href="https://d-arty.github.io/tutorials/form-request-rules.html" />
+
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Writing rules() in a Form Request | Danici Artiom" />
+	<meta property="og:description" content="Go beyond pipe-delimited strings: rule arrays, Rule objects, conditional rules, and custom messages() and attributes()." />
+	<meta property="og:url" content="https://d-arty.github.io/tutorials/form-request-rules.html" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Writing rules() in a Form Request | Danici Artiom" />
+	<meta name="twitter:description" content="Go beyond pipe-delimited strings: rule arrays, Rule objects, conditional rules, and custom messages() and attributes()." />
+
+	<link rel="stylesheet" href="../css/fonts.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="stylesheet" href="css/tutorials.css" />
+</head>
+<body data-tutorial-slug="form-request-rules">
+	<a class="skip-link" href="#main">Skip to content</a>
+
+	<header class="tutorial-topbar">
+		<div class="container">
+			<nav class="tutorial-topbar__links" aria-label="Site">
+				<a href="../index.html">&larr; Danici Artiom</a>
+				<a href="index.html">All tutorials</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<article class="tutorial-article">
+			<div class="container">
+				<span class="section-eyebrow">// tutorial</span>
+				<h1>Writing rules() in a Form Request</h1>
+				<p class="tutorial-article__intro">The <code>rules()</code> method looks like a plain array of pipe-delimited strings, but each entry can just as easily be an array, a <code>Rule</code> object, or a closure. Here's what's available once the basic <code>required|string|max:255</code> stops being enough.</p>
+				<div class="tutorial-meta">
+					<span class="tag">php</span>
+					<span class="tag">laravel</span>
+					<span class="tag">validation</span>
+					<span class="read-time">6 min read</span>
+				</div>
+
+				<ol class="steps">
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">String syntax vs array syntax</h2>
+						<p>A pipe-delimited string and an array of rules mean exactly the same thing — the array form just avoids escaping when a rule's parameter contains a pipe or comma itself, like a regex.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">public function rules(): array
+{
+    return [
+        'email' => 'required|email|max:255',
+
+        // equivalent, array form
+        'email' => ['required', 'email', 'max:255'],
+    ];
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Rule objects for anything dynamic</h2>
+						<p>The <code>Rule</code> facade builds rules that need runtime values — like ignoring the current record's own row on an <code>unique</code> check during an update.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">use Illuminate\Validation\Rule;
+
+public function rules(): array
+{
+    return [
+        'email' => [
+            'required',
+            'email',
+            Rule::unique('users')->ignore($this->user),
+        ],
+        'status' => ['required', Rule::in(['draft', 'published', 'archived'])],
+    ];
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Conditional rules</h2>
+						<p>Some fields only need validating depending on other input. <code>sometimes</code> skips a rule entirely when the field is absent from the request; <code>Rule::when()</code> and reading <code>$this-&gt;input()</code> handle everything more conditional than that, since <code>rules()</code> is just a regular method.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">public function rules(): array
+{
+    return [
+        'promo_code' => 'sometimes|string|max:20',
+
+        'shipping_address' => [
+            Rule::requiredIf($this->input('delivery_method') === 'courier'),
+            'string',
+        ],
+    ];
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Custom messages and attribute names</h2>
+						<p>Override <code>messages()</code> to replace the default English copy for specific <code>rule.field</code> combinations, and <code>attributes()</code> to control the field name that gets substituted into the <code>:attribute</code> placeholder.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">public function messages(): array
+{
+    return [
+        'price.min' => 'The price can\'t be negative.',
+    ];
+}
+
+public function attributes(): array
+{
+    return [
+        'sku' => 'SKU',
+    ];
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Validating nested and array input</h2>
+						<p>Dot notation reaches into nested arrays, and <code>*</code> applies the same rule to every item in a list — handy for a request with a repeated group of fields, like order line items.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">public function rules(): array
+{
+    return [
+        'items' => 'required|array|min:1',
+        'items.*.product_id' => 'required|integer|exists:products,id',
+        'items.*.quantity' => 'required|integer|min:1',
+    ];
+}</code></pre>
+						</div>
+					</li>
+				</ol>
+
+				<nav class="tutorial-pager" id="tutorial-pager" aria-label="More tutorials"></nav>
+			</div>
+		</article>
+	</main>
+
+	<footer class="site-footer">
+		<a class="back-to-top" href="#top">&uarr; Back to top</a>
+		<p>&copy; 2026 Danici Artiom</p>
+	</footer>
+
+	<script src="vendor/prism/prism-core.min.js"></script>
+	<script src="vendor/prism/prism-clike.min.js"></script>
+	<script src="vendor/prism/prism-markup.min.js"></script>
+	<script src="vendor/prism/prism-css.min.js"></script>
+	<script src="vendor/prism/prism-javascript.min.js"></script>
+	<script src="vendor/prism/prism-typescript.min.js"></script>
+	<script src="vendor/prism/prism-php.min.js"></script>
+	<script src="vendor/prism/prism-bash.min.js"></script>
+	<script src="vendor/prism/prism-json.min.js"></script>
+	<script src="vendor/prism/prism-yaml.min.js"></script>
+	<script src="js/tutorials-data.js"></script>
+	<script src="js/tutorials.js"></script>
+</body>
+</html>

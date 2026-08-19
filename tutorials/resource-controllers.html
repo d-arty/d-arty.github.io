@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Resource controllers with Route::resource | Danici Artiom</title>
+	<meta name="description" content="Generate a resource controller with artisan, wire it up with Route::resource, and see all 7 RESTful methods it expects — plus the apiResource variant." />
+	<meta name="author" content="Danici Artiom" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+	<link rel="icon" href="../favicon.png" sizes="32x32" type="image/png" />
+	<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+	<link rel="canonical" href="https://d-arty.github.io/tutorials/resource-controllers.html" />
+
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Resource controllers with Route::resource | Danici Artiom" />
+	<meta property="og:description" content="Generate a resource controller with artisan, wire it up with Route::resource, and see all 7 RESTful methods it expects — plus the apiResource variant." />
+	<meta property="og:url" content="https://d-arty.github.io/tutorials/resource-controllers.html" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Resource controllers with Route::resource | Danici Artiom" />
+	<meta name="twitter:description" content="Generate a resource controller with artisan, wire it up with Route::resource, and see all 7 RESTful methods it expects — plus the apiResource variant." />
+
+	<link rel="stylesheet" href="../css/fonts.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="stylesheet" href="css/tutorials.css" />
+</head>
+<body data-tutorial-slug="resource-controllers">
+	<a class="skip-link" href="#main">Skip to content</a>
+
+	<header class="tutorial-topbar">
+		<div class="container">
+			<nav class="tutorial-topbar__links" aria-label="Site">
+				<a href="../index.html">&larr; Danici Artiom</a>
+				<a href="index.html">All tutorials</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<article class="tutorial-article">
+			<div class="container">
+				<span class="section-eyebrow">// tutorial</span>
+				<h1>Resource controllers with Route::resource</h1>
+				<p class="tutorial-article__intro">One artisan command and one route line give you a controller with all 7 conventional CRUD methods already stubbed out and wired to the right verbs and URIs. Here's how it fits together, method by method — and the leaner <code>apiResource</code> version for when there's no browser involved.</p>
+				<div class="tutorial-meta">
+					<span class="tag">php</span>
+					<span class="tag">laravel</span>
+					<span class="tag">routing</span>
+					<span class="read-time">7 min read</span>
+				</div>
+
+				<ol class="steps">
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Generate the controller</h2>
+						<p>The <code>--resource</code> flag stubs out all 7 CRUD methods with empty bodies, instead of the single <code>index()</code> you'd get from a plain controller. Add <code>--model</code> to type-hint the methods against an existing Eloquent model.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">php artisan make:controller ProductController --resource --model=Product</code></pre>
+						</div>
+						<p>That creates <code>app/Http/Controllers/ProductController.php</code> with <code>index</code>, <code>create</code>, <code>store</code>, <code>show</code>, <code>edit</code>, <code>update</code> and <code>destroy</code> already declared.</p>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Register the route</h2>
+						<p>One line in <code>routes/web.php</code> registers all 7 routes at once — the URIs, HTTP verbs and route names all follow REST conventions, so there's nothing left to configure.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">use App\Http\Controllers\ProductController;
+
+Route::resource('products', ProductController::class);</code></pre>
+						</div>
+						<p>Confirm what got registered with:</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">php artisan route:list</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">The 7 methods it expects</h2>
+						<p>Two of the seven — <code>create</code> and <code>edit</code> — only exist to show HTML forms, which is why they drop out of the API version in the next step.</p>
+						<div class="table-scroll">
+							<table class="method-table">
+								<thead>
+									<tr>
+										<th>Verb</th>
+										<th>URI</th>
+										<th>Method</th>
+										<th>Route name</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="method-table__verb">GET</td>
+										<td>/products</td>
+										<td>index</td>
+										<td>products.index</td>
+									</tr>
+									<tr>
+										<td class="method-table__verb">GET</td>
+										<td>/products/create</td>
+										<td>create</td>
+										<td>products.create</td>
+									</tr>
+									<tr>
+										<td class="method-table__verb">POST</td>
+										<td>/products</td>
+										<td>store</td>
+										<td>products.store</td>
+									</tr>
+									<tr>
+										<td class="method-table__verb">GET</td>
+										<td>/products/{product}</td>
+										<td>show</td>
+										<td>products.show</td>
+									</tr>
+									<tr>
+										<td class="method-table__verb">GET</td>
+										<td>/products/{product}/edit</td>
+										<td>edit</td>
+										<td>products.edit</td>
+									</tr>
+									<tr>
+										<td class="method-table__verb">PUT/PATCH</td>
+										<td>/products/{product}</td>
+										<td>update</td>
+										<td>products.update</td>
+									</tr>
+									<tr>
+										<td class="method-table__verb">DELETE</td>
+										<td>/products/{product}</td>
+										<td>destroy</td>
+										<td>products.destroy</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Fill in a couple of methods</h2>
+						<p>Because the controller was generated with <code>--model=Product</code>, the methods that take a <code>{product}</code> URI segment already type-hint <code>Product $product</code> — Laravel resolves it from the route via route model binding, no manual lookup needed.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">public function index()
+{
+    return Product::latest()->paginate(20);
+}
+
+public function store(Request $request)
+{
+    $product = Product::create($request->validate([
+        'name' => 'required|string|max:255',
+        'price' => 'required|numeric|min:0',
+    ]));
+
+    return redirect()->route('products.show', $product);
+}
+
+public function show(Product $product)
+{
+    return view('products.show', compact('product'));
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Building an API instead? Use apiResource</h2>
+						<p>An API has no HTML forms, so it never needs <code>create</code> or <code>edit</code>. The <code>--api</code> flag generates a controller without those two, and <code>Route::apiResource</code> registers only the remaining 5 routes.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">php artisan make:controller Api/ProductController --api --model=Product</code></pre>
+						</div>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">use App\Http\Controllers\Api\ProductController;
+
+Route::apiResource('products', ProductController::class);</code></pre>
+						</div>
+						<p>That leaves exactly <code>index</code>, <code>store</code>, <code>show</code>, <code>update</code> and <code>destroy</code> — the same verbs and URIs as the table above, minus the two <code>GET</code> routes that used to render forms.</p>
+					</li>
+				</ol>
+
+				<nav class="tutorial-pager" id="tutorial-pager" aria-label="More tutorials"></nav>
+			</div>
+		</article>
+	</main>
+
+	<footer class="site-footer">
+		<a class="back-to-top" href="#top">&uarr; Back to top</a>
+		<p>&copy; 2026 Danici Artiom</p>
+	</footer>
+
+	<script src="vendor/prism/prism-core.min.js"></script>
+	<script src="vendor/prism/prism-clike.min.js"></script>
+	<script src="vendor/prism/prism-markup.min.js"></script>
+	<script src="vendor/prism/prism-css.min.js"></script>
+	<script src="vendor/prism/prism-javascript.min.js"></script>
+	<script src="vendor/prism/prism-typescript.min.js"></script>
+	<script src="vendor/prism/prism-php.min.js"></script>
+	<script src="vendor/prism/prism-bash.min.js"></script>
+	<script src="vendor/prism/prism-json.min.js"></script>
+	<script src="vendor/prism/prism-yaml.min.js"></script>
+	<script src="js/tutorials-data.js"></script>
+	<script src="js/tutorials.js"></script>
+</body>
+</html>

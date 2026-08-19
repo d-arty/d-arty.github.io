@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Building a custom validation rule | Danici Artiom</title>
+	<meta name="description" content="Generate a custom Rule class with artisan, implement a password strength check, and wire it into a Form Request." />
+	<meta name="author" content="Danici Artiom" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+	<link rel="icon" href="../favicon.png" sizes="32x32" type="image/png" />
+	<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+	<link rel="canonical" href="https://d-arty.github.io/tutorials/custom-validation-rule.html" />
+
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Building a custom validation rule | Danici Artiom" />
+	<meta property="og:description" content="Generate a custom Rule class with artisan, implement a password strength check, and wire it into a Form Request." />
+	<meta property="og:url" content="https://d-arty.github.io/tutorials/custom-validation-rule.html" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Building a custom validation rule | Danici Artiom" />
+	<meta name="twitter:description" content="Generate a custom Rule class with artisan, implement a password strength check, and wire it into a Form Request." />
+
+	<link rel="stylesheet" href="../css/fonts.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="stylesheet" href="css/tutorials.css" />
+</head>
+<body data-tutorial-slug="custom-validation-rule">
+	<a class="skip-link" href="#main">Skip to content</a>
+
+	<header class="tutorial-topbar">
+		<div class="container">
+			<nav class="tutorial-topbar__links" aria-label="Site">
+				<a href="../index.html">&larr; Danici Artiom</a>
+				<a href="index.html">All tutorials</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<article class="tutorial-article">
+			<div class="container">
+				<span class="section-eyebrow">// tutorial</span>
+				<h1>Building a custom validation rule</h1>
+				<p class="tutorial-article__intro">Once a check needs more than a builtin rule can express — like a password strength policy — it belongs in its own <code>Rule</code> class, not stuffed into a closure inside <code>rules()</code>. Here's one that requires an uppercase letter, a lowercase letter, a symbol and a minimum length, wired into a Form Request.</p>
+				<div class="tutorial-meta">
+					<span class="tag">php</span>
+					<span class="tag">laravel</span>
+					<span class="tag">validation</span>
+					<span class="read-time">5 min read</span>
+				</div>
+
+				<ol class="steps">
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Generate the rule</h2>
+						<p>Passing a namespaced name creates the class inside a matching subdirectory of <code>app/Rules</code> — handy for grouping related rules, like keeping every auth-related rule under <code>App\Rules\Auth</code>.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">php artisan make:rule Auth/SecurePassword</code></pre>
+						</div>
+						<p>That creates <code>app/Rules/Auth/SecurePassword.php</code> implementing the <code>Rule</code> contract, with <code>passes()</code> and <code>message()</code> stubbed out.</p>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Implement passes() and message()</h2>
+						<p><code>passes()</code> gets the attribute name and its value, and returns a boolean. <code>message()</code> supplies the error text used when it returns <code>false</code> — this one requires at least one lowercase letter, one uppercase letter, one symbol, and 8 characters minimum.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">&lt;?php
+
+namespace App\Rules\Auth;
+
+use Illuminate\Contracts\Validation\Rule;
+
+class SecurePassword implements Rule
+{
+    public function passes($attribute, $value)
+    {
+        return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/', $value);
+    }
+
+    public function message()
+    {
+        return 'The password you entered does not meet the security requirements.';
+    }
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Drop it into a Form Request's rules()</h2>
+						<p>A custom rule instance slots into the array alongside builtin rules the same way a <code>Rule::in()</code> or <code>Rule::unique()</code> object does.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">use App\Rules\Auth\SecurePassword;
+
+public function rules(): array
+{
+    return [
+        'password' => ['required', 'string', 'confirmed', new SecurePassword()],
+    ];
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Keep the class stateless and reusable</h2>
+						<p>Because <code>SecurePassword</code> doesn't depend on the request it's validating, the same instance can be reused across every Form Request that collects a password — registration, password reset, account settings — without duplicating the regex anywhere.</p>
+					</li>
+				</ol>
+
+				<nav class="tutorial-pager" id="tutorial-pager" aria-label="More tutorials"></nav>
+			</div>
+		</article>
+	</main>
+
+	<footer class="site-footer">
+		<a class="back-to-top" href="#top">&uarr; Back to top</a>
+		<p>&copy; 2026 Danici Artiom</p>
+	</footer>
+
+	<script src="vendor/prism/prism-core.min.js"></script>
+	<script src="vendor/prism/prism-clike.min.js"></script>
+	<script src="vendor/prism/prism-markup.min.js"></script>
+	<script src="vendor/prism/prism-css.min.js"></script>
+	<script src="vendor/prism/prism-javascript.min.js"></script>
+	<script src="vendor/prism/prism-typescript.min.js"></script>
+	<script src="vendor/prism/prism-php.min.js"></script>
+	<script src="vendor/prism/prism-bash.min.js"></script>
+	<script src="vendor/prism/prism-json.min.js"></script>
+	<script src="vendor/prism/prism-yaml.min.js"></script>
+	<script src="js/tutorials-data.js"></script>
+	<script src="js/tutorials.js"></script>
+</body>
+</html>

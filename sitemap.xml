@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+	<url>
+		<loc>https://d-arty.github.io/</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://d-arty.github.io/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://d-arty.github.io/ru_index.html" />
+		<xhtml:link rel="alternate" hreflang="ro" href="https://d-arty.github.io/ro_index.html" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://d-arty.github.io/" />
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/ru_index.html</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://d-arty.github.io/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://d-arty.github.io/ru_index.html" />
+		<xhtml:link rel="alternate" hreflang="ro" href="https://d-arty.github.io/ro_index.html" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://d-arty.github.io/" />
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/ro_index.html</loc>
+		<xhtml:link rel="alternate" hreflang="en" href="https://d-arty.github.io/" />
+		<xhtml:link rel="alternate" hreflang="ru" href="https://d-arty.github.io/ru_index.html" />
+		<xhtml:link rel="alternate" hreflang="ro" href="https://d-arty.github.io/ro_index.html" />
+		<xhtml:link rel="alternate" hreflang="x-default" href="https://d-arty.github.io/" />
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/tutorials/index.html</loc>
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/tutorials/install-laravel-13.html</loc>
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/tutorials/resource-controllers.html</loc>
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/tutorials/git-branching-main-dev.html</loc>
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/tutorials/form-requests.html</loc>
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/tutorials/form-request-rules.html</loc>
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/tutorials/custom-validation-rule.html</loc>
+	</url>
+	<url>
+		<loc>https://d-arty.github.io/tutorials/secrets-in-env.html</loc>
+	</url>
+</urlset>

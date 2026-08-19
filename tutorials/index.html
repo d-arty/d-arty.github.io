@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Tutorials | Danici Artiom</title>
+	<meta name="description" content="Short, practical tutorials by Danici Artiom — Backend Developer. Laravel, TypeScript, Git, Docker and more." />
+	<meta name="author" content="Danici Artiom" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+	<link rel="icon" href="../favicon.png" sizes="32x32" type="image/png" />
+	<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+	<link rel="canonical" href="https://d-arty.github.io/tutorials/index.html" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Tutorials | Danici Artiom" />
+	<meta property="og:description" content="Short, practical tutorials by Danici Artiom — Backend Developer." />
+	<meta property="og:url" content="https://d-arty.github.io/tutorials/index.html" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Tutorials | Danici Artiom" />
+	<meta name="twitter:description" content="Short, practical tutorials by Danici Artiom — Backend Developer." />
+
+	<link rel="stylesheet" href="../css/fonts.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="stylesheet" href="css/tutorials.css" />
+</head>
+<body>
+	<a class="skip-link" href="#main">Skip to content</a>
+
+	<header class="tutorial-topbar">
+		<div class="container">
+			<nav class="tutorial-topbar__links" aria-label="Site">
+				<a href="../index.html">&larr; Danici Artiom</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<section class="tutorials-hero">
+			<div class="container">
+				<span class="section-eyebrow">// tutorials</span>
+				<h1>Tutorials</h1>
+				<p>Short, practical write-ups on the tools I use day to day. Search or filter by tag, or just browse — each one stands on its own.</p>
+			</div>
+		</section>
+
+		<section class="tutorials-list">
+			<div class="container">
+				<div class="tutorial-controls">
+					<label class="tutorial-search">
+						<span class="visually-hidden">Search tutorials</span>
+						<input type="search" id="tutorial-search" placeholder="Search tutorials…" autocomplete="off" />
+					</label>
+					<div class="tutorial-tags" id="tutorial-tags" role="group" aria-label="Filter by tag"></div>
+				</div>
+				<ul class="tutorial-grid" id="tutorial-grid"></ul>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<a class="back-to-top" href="#top">&uarr; Back to top</a>
+		<p>&copy; 2026 Danici Artiom</p>
+	</footer>
+
+	<script src="js/tutorials-data.js"></script>
+	<script src="js/tutorials.js"></script>
+</body>
+</html>

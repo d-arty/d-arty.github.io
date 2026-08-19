@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>How to install Laravel 13.x | Danici Artiom</title>
+	<meta name="description" content="Set up PHP, Composer and the Laravel installer, then scaffold and run a fresh Laravel 13 project from scratch." />
+	<meta name="author" content="Danici Artiom" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+	<link rel="icon" href="../favicon.png" sizes="32x32" type="image/png" />
+	<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+	<link rel="canonical" href="https://d-arty.github.io/tutorials/install-laravel-13.html" />
+
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="How to install Laravel 13.x | Danici Artiom" />
+	<meta property="og:description" content="Set up PHP, Composer and the Laravel installer, then scaffold and run a fresh Laravel 13 project from scratch." />
+	<meta property="og:url" content="https://d-arty.github.io/tutorials/install-laravel-13.html" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="How to install Laravel 13.x | Danici Artiom" />
+	<meta name="twitter:description" content="Set up PHP, Composer and the Laravel installer, then scaffold and run a fresh Laravel 13 project from scratch." />
+
+	<link rel="stylesheet" href="../css/fonts.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="stylesheet" href="css/tutorials.css" />
+</head>
+<body data-tutorial-slug="install-laravel-13">
+	<a class="skip-link" href="#main">Skip to content</a>
+
+	<header class="tutorial-topbar">
+		<div class="container">
+			<nav class="tutorial-topbar__links" aria-label="Site">
+				<a href="../index.html">&larr; Danici Artiom</a>
+				<a href="index.html">All tutorials</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<article class="tutorial-article">
+			<div class="container">
+				<span class="section-eyebrow">// tutorial</span>
+				<h1>How to install Laravel 13.x</h1>
+				<p class="tutorial-article__intro">The fastest path from a clean machine to a running Laravel 13 app. We'll check the requirements, install the Laravel installer via Composer, scaffold a new project, and boot the dev server.</p>
+				<div class="tutorial-meta">
+					<span class="tag">php</span>
+					<span class="tag">laravel</span>
+					<span class="tag">composer</span>
+					<span class="read-time">6 min read</span>
+				</div>
+
+				<ol class="steps">
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Check PHP and Composer</h2>
+						<p>Laravel 13 requires <strong>PHP 8.3 or newer</strong> and <strong>Composer 2</strong>. Confirm both are installed before going further — if either command is missing, install PHP through your OS package manager and Composer from <code>getcomposer.org</code> first.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">php -v
+
+composer -V</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Install the Laravel installer</h2>
+						<p>The <code>laravel/installer</code> package gives you the <code>laravel new</code> command, which scaffolds a project faster than a raw Composer <code>create-project</code> and lets you pick a starter kit interactively. Install it globally, once, per machine.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">composer global require laravel/installer</code></pre>
+						</div>
+						<p>Make sure Composer's global <code>vendor/bin</code> directory is on your <code>PATH</code>, or the <code>laravel</code> command won't be found afterwards.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">export PATH="$HOME/.config/composer/vendor/bin:$PATH"</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Scaffold a new project</h2>
+						<p>Run <code>laravel new</code> with your project name. The installer walks you through picking a starter kit, testing framework and database — press Enter to accept the defaults if you just want a plain app to explore.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">laravel new example-app
+
+cd example-app</code></pre>
+						</div>
+						<p>No Laravel installer? A plain Composer create-project works exactly the same way:</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">composer create-project laravel/laravel example-app
+
+cd example-app</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Set up your <code>.env</code> and app key</h2>
+						<p>The <code>laravel new</code> installer copies <code>.env.example</code> to <code>.env</code> and generates the <code>APP_KEY</code> for you. If you scaffolded with a plain Composer <code>create-project</code> instead, <code>.env</code> exists but <code>APP_KEY</code> is empty from a zero install — generate it yourself before running the app.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">php artisan key:generate</code></pre>
+						</div>
+						<p>By default <code>DB_CONNECTION</code> is set to <code>sqlite</code>, which needs no separate database server — good enough to get moving. Switch it to <code>mysql</code> or <code>pgsql</code> in <code>.env</code> whenever you're ready to point at a real database.</p>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Run the dev server</h2>
+						<p>Start Laravel's built-in server and open the URL it prints. You should land on the default Laravel welcome page.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">php artisan serve
+
+# then open http://127.0.0.1:8000</code></pre>
+						</div>
+						<p>Prefer one command that also watches your queue, logs and Vite build? Laravel ships a combined dev script for that:</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">composer run dev</code></pre>
+						</div>
+					</li>
+				</ol>
+
+				<nav class="tutorial-pager" id="tutorial-pager" aria-label="More tutorials"></nav>
+			</div>
+		</article>
+	</main>
+
+	<footer class="site-footer">
+		<a class="back-to-top" href="#top">&uarr; Back to top</a>
+		<p>&copy; 2026 Danici Artiom</p>
+	</footer>
+
+	<script src="vendor/prism/prism-core.min.js"></script>
+	<script src="vendor/prism/prism-clike.min.js"></script>
+	<script src="vendor/prism/prism-markup.min.js"></script>
+	<script src="vendor/prism/prism-css.min.js"></script>
+	<script src="vendor/prism/prism-javascript.min.js"></script>
+	<script src="vendor/prism/prism-typescript.min.js"></script>
+	<script src="vendor/prism/prism-php.min.js"></script>
+	<script src="vendor/prism/prism-bash.min.js"></script>
+	<script src="vendor/prism/prism-json.min.js"></script>
+	<script src="vendor/prism/prism-yaml.min.js"></script>
+	<script src="js/tutorials-data.js"></script>
+	<script src="js/tutorials.js"></script>
+</body>
+</html>

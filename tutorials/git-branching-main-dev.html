@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Use a dev branch so main stays deployable | Danici Artiom</title>
+	<meta name="description" content="Keep production safe by doing all your work on a dev branch and only merging into main when it's actually ready to ship." />
+	<meta name="author" content="Danici Artiom" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+	<link rel="icon" href="../favicon.png" sizes="32x32" type="image/png" />
+	<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+	<link rel="canonical" href="https://d-arty.github.io/tutorials/git-branching-main-dev.html" />
+
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Use a dev branch so main stays deployable | Danici Artiom" />
+	<meta property="og:description" content="Keep production safe by doing all your work on a dev branch and only merging into main when it's actually ready to ship." />
+	<meta property="og:url" content="https://d-arty.github.io/tutorials/git-branching-main-dev.html" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Use a dev branch so main stays deployable | Danici Artiom" />
+	<meta name="twitter:description" content="Keep production safe by doing all your work on a dev branch and only merging into main when it's actually ready to ship." />
+
+	<link rel="stylesheet" href="../css/fonts.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="stylesheet" href="css/tutorials.css" />
+</head>
+<body data-tutorial-slug="git-branching-main-dev">
+	<a class="skip-link" href="#main">Skip to content</a>
+
+	<header class="tutorial-topbar">
+		<div class="container">
+			<nav class="tutorial-topbar__links" aria-label="Site">
+				<a href="../index.html">&larr; Danici Artiom</a>
+				<a href="index.html">All tutorials</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<article class="tutorial-article">
+			<div class="container">
+				<span class="section-eyebrow">// tutorial</span>
+				<h1>Use a dev branch so main stays deployable</h1>
+				<p class="tutorial-article__intro">If <code>main</code> is what's actually running in production, committing straight to it means every half-finished change is one push away from breaking things for real users. Doing the work on a <code>dev</code> branch instead gives you a safe place to build and break things, and turns "shipping" into a deliberate step — merging into <code>main</code> — instead of an accident.</p>
+				<div class="tutorial-meta">
+					<span class="tag">git</span>
+					<span class="tag">workflow</span>
+					<span class="tag">branching</span>
+					<span class="read-time">6 min read</span>
+				</div>
+
+				<ol class="steps">
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Why not just commit to main?</h2>
+						<p><code>main</code> should always be in a state you'd be comfortable deploying right now. Committing feature work directly to it means every in-progress change — an untested query, a half-wired UI, a broken migration — sits on the same branch your deploy pipeline watches. A <code>dev</code> branch (or one branch per feature) gives that work somewhere to live until it's actually done, without ever putting <code>main</code> at risk.</p>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Create the dev branch from main</h2>
+						<p>Start from an up-to-date <code>main</code>, then branch off it. <code>-b</code> creates the branch and switches to it in one step.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">git checkout main
+
+git pull origin main
+
+git checkout -b dev
+
+git push -u origin dev</code></pre>
+						</div>
+						<p>The last line publishes <code>dev</code> to the remote and links your local branch to it, so plain <code>git push</code> and <code>git pull</code> work from here on.</p>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Do the actual work on dev</h2>
+						<p>Everything — new features, refactors, risky experiments — happens on <code>dev</code> (or a branch cut from it). Commit as often as makes sense; <code>main</code> never sees any of this until you decide it's ready.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">git add .
+
+git commit -m "Add checkout validation"
+
+git push</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Merge dev into main when it's ready</h2>
+						<p>Once <code>dev</code> is tested and you actually want it live, merge it into <code>main</code> — not the other way around. <code>--no-ff</code> keeps a merge commit even if the merge could fast-forward, so your history still shows where each round of work landed.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">git checkout main
+
+git pull origin main
+
+git merge --no-ff dev -m "Merge dev: checkout validation"
+
+git push origin main</code></pre>
+						</div>
+						<p>This is also the natural place for a pull request instead of a local merge — same idea, but with review and CI running against <code>dev</code> before it touches <code>main</code>.</p>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Bring dev back up to date</h2>
+						<p>After <code>main</code> moves — from this merge, a hotfix, or anyone else's work — sync those changes back into <code>dev</code> before you keep building, so you're never merging a badly outdated branch later.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">git checkout dev
+
+git merge main
+
+git push</code></pre>
+						</div>
+						<p>Repeat from step 3: build on <code>dev</code>, merge into <code>main</code> when ready, sync back — <code>main</code> stays deployable at every point in between.</p>
+					</li>
+				</ol>
+
+				<nav class="tutorial-pager" id="tutorial-pager" aria-label="More tutorials"></nav>
+			</div>
+		</article>
+	</main>
+
+	<footer class="site-footer">
+		<a class="back-to-top" href="#top">&uarr; Back to top</a>
+		<p>&copy; 2026 Danici Artiom</p>
+	</footer>
+
+	<script src="vendor/prism/prism-core.min.js"></script>
+	<script src="vendor/prism/prism-clike.min.js"></script>
+	<script src="vendor/prism/prism-markup.min.js"></script>
+	<script src="vendor/prism/prism-css.min.js"></script>
+	<script src="vendor/prism/prism-javascript.min.js"></script>
+	<script src="vendor/prism/prism-typescript.min.js"></script>
+	<script src="vendor/prism/prism-php.min.js"></script>
+	<script src="vendor/prism/prism-bash.min.js"></script>
+	<script src="vendor/prism/prism-json.min.js"></script>
+	<script src="vendor/prism/prism-yaml.min.js"></script>
+	<script src="js/tutorials-data.js"></script>
+	<script src="js/tutorials.js"></script>
+</body>
+</html>

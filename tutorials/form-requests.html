@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Move validation into Form Requests | Danici Artiom</title>
+	<meta name="description" content="Generate a Form Request with artisan, move validation out of the controller, and let Laravel handle the redirect and error bag automatically." />
+	<meta name="author" content="Danici Artiom" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+	<link rel="icon" href="../favicon.png" sizes="32x32" type="image/png" />
+	<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+
+	<link rel="canonical" href="https://d-arty.github.io/tutorials/form-requests.html" />
+
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Move validation into Form Requests | Danici Artiom" />
+	<meta property="og:description" content="Generate a Form Request with artisan, move validation out of the controller, and let Laravel handle the redirect and error bag automatically." />
+	<meta property="og:url" content="https://d-arty.github.io/tutorials/form-requests.html" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Move validation into Form Requests | Danici Artiom" />
+	<meta name="twitter:description" content="Generate a Form Request with artisan, move validation out of the controller, and let Laravel handle the redirect and error bag automatically." />
+
+	<link rel="stylesheet" href="../css/fonts.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="stylesheet" href="css/tutorials.css" />
+</head>
+<body data-tutorial-slug="form-requests">
+	<a class="skip-link" href="#main">Skip to content</a>
+
+	<header class="tutorial-topbar">
+		<div class="container">
+			<nav class="tutorial-topbar__links" aria-label="Site">
+				<a href="../index.html">&larr; Danici Artiom</a>
+				<a href="index.html">All tutorials</a>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<article class="tutorial-article">
+			<div class="container">
+				<span class="section-eyebrow">// tutorial</span>
+				<h1>Move validation into Form Requests</h1>
+				<p class="tutorial-article__intro">Validating inline with <code>$request->validate()</code> works fine until a controller method has to do it, authorize it, and handle the business logic all at once. A Form Request pulls the validation — and the authorization check — into its own class, so the controller only ever sees data that's already clean.</p>
+				<div class="tutorial-meta">
+					<span class="tag">php</span>
+					<span class="tag">laravel</span>
+					<span class="tag">validation</span>
+					<span class="read-time">6 min read</span>
+				</div>
+
+				<ol class="steps">
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Generate the request</h2>
+						<p>The <code>make:request</code> artisan command creates a class in <code>app/Http/Requests</code> with two methods already stubbed out: <code>authorize()</code> and <code>rules()</code>.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">bash</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-bash"><code class="language-bash">php artisan make:request StoreProductRequest</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Decide who's allowed to make this request</h2>
+						<p><code>authorize()</code> runs before <code>rules()</code>. Return <code>false</code> and Laravel aborts with a 403 before any validation happens — useful for checking a policy or a simple ownership rule without cluttering the controller.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">public function authorize(): bool
+{
+    return $this->user()->can('create', Product::class);
+}</code></pre>
+						</div>
+						<p>Most of the time this can just <code>return true;</code> and let a middleware or policy handle authorization elsewhere.</p>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Write the rules</h2>
+						<p><code>rules()</code> returns the same array shape as <code>$request->validate()</code> would take — see the next tutorial for everything that can go in here.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">public function rules(): array
+{
+    return [
+        'name' => 'required|string|max:255',
+        'price' => 'required|numeric|min:0',
+    ];
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Type-hint it instead of Request</h2>
+						<p>Swap the controller method's <code>Request</code> type-hint for the Form Request class. Laravel resolves it out of the container, runs <code>authorize()</code> and <code>rules()</code> automatically, and — on failure — redirects back with the errors flashed to the session for a normal web request, or returns a 422 JSON response for an API call. The controller method body never even runs if validation fails.</p>
+						<div class="code-block">
+							<div class="code-block__bar">
+								<span class="code-block__lang">php</span>
+								<button class="code-block__copy" type="button">Copy</button>
+							</div>
+							<pre class="language-php"><code class="language-php">use App\Http\Requests\StoreProductRequest;
+
+public function store(StoreProductRequest $request)
+{
+    $product = Product::create($request->validated());
+
+    return redirect()->route('products.show', $product);
+}</code></pre>
+						</div>
+					</li>
+
+					<li class="step">
+						<span class="step__num" aria-hidden="true"></span>
+						<h2 class="step__title">Use validated(), not all()</h2>
+						<p><code>$request->validated()</code> returns only the fields that were actually declared in <code>rules()</code> — so a request stuffed with extra fields can't sneak them into a mass-assignment call. <code>$request->all()</code> would include everything the client sent, validated or not.</p>
+					</li>
+				</ol>
+
+				<nav class="tutorial-pager" id="tutorial-pager" aria-label="More tutorials"></nav>
+			</div>
+		</article>
+	</main>
+
+	<footer class="site-footer">
+		<a class="back-to-top" href="#top">&uarr; Back to top</a>
+		<p>&copy; 2026 Danici Artiom</p>
+	</footer>
+
+	<script src="vendor/prism/prism-core.min.js"></script>
+	<script src="vendor/prism/prism-clike.min.js"></script>
+	<script src="vendor/prism/prism-markup.min.js"></script>
+	<script src="vendor/prism/prism-css.min.js"></script>
+	<script src="vendor/prism/prism-javascript.min.js"></script>
+	<script src="vendor/prism/prism-typescript.min.js"></script>
+	<script src="vendor/prism/prism-php.min.js"></script>
+	<script src="vendor/prism/prism-bash.min.js"></script>
+	<script src="vendor/prism/prism-json.min.js"></script>
+	<script src="vendor/prism/prism-yaml.min.js"></script>
+	<script src="js/tutorials-data.js"></script>
+	<script src="js/tutorials.js"></script>
+</body>
+</html>
